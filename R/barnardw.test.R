@@ -1,13 +1,17 @@
 `barnardw.test` <-
-function(n1,n2,n3,n4,dp=0.001,verbose=FALSE) {
+function(n1,n2,n3,n4,dp=0.001) {
   n1<-abs(as.integer(n1))
   n2<-abs(as.integer(n2))
   n3<-abs(as.integer(n3))
   n4<-abs(as.integer(n4))
-  if (!(n1+n2) || !(n3+n4) || !(n1+n3) || !(n2+n4)) {
+
+  conmat<-matrix(c(n1,n2,n3,n4),ncol=2,byrow=TRUE,dimnames=list(c("Outcome I","Outcome II"),c("Treatment I","Treatment II")))
+  alternative<-c("One sided","Two sided")
+  
+  if (any(rowSums(conmat)==0) || any(colSums(conmat)==0)) {
     warning("No observations found in at least one category")
-    return(list(contingency.matrix = matrix(c(n1,n2,n3,n4),ncol=2,byrow=TRUE),
-                alternative = c("One Sided","Two Sided"),
+    return(list(contingency.matrix = conmat,
+                alternative = alternative,
                 p.value = c(1,1)))
   }
       
@@ -42,24 +46,31 @@ function(n1,n2,n3,n4,dp=0.001,verbose=FALSE) {
   np0<-which.max(ret2$nuisance.vector.y0)
   np1<-which.max(ret2$nuisance.vector.y1)
   
-  if (verbose) {
-    nuisance.matrix<-matrix(cbind(ret2$nuisance.vector.x,ret2$nuisance.vector.y0,ret2$nuisance.vector.y1),ncol=3)
-    wald.statistic.table<-matrix(ret1$wald.statistic.table,ncol=4,byrow=TRUE,dimnames=list(c(),c("n1","n2","wald.statistic","include.in.p.value")))
-    return(list(wald.statistic.table = wald.statistic.table,
-                nuisance.matrix = nuisance.matrix,
-                dp = dp,
-                contingency.matrix = matrix(c(n1,n2,n3,n4),ncol=2,byrow=TRUE,dimnames=list(c("test1","test2"),c("cat1","cat2"))),
-                alternative = c("One Sided","Two Sided"),
-                wald.statistic = ret1$wald.statistic,
-                nuisance.parameter = ret2$nuisance.vector.x[c(np0,np1)],
-                p.value = c(ret2$nuisance.vector.y0[np0],ret2$nuisance.vector.y1[np1])))
-  } else {
-    return(list(dp = dp,
-                contingency.matrix = matrix(c(n1,n2,n3,n4),ncol=2,byrow=TRUE,dimnames=list(c("test1","test2"),c("cat1","cat2"))),
-                alternative = c("One Sided","Two Sided"),
-                wald.statistic = ret1$wald.statistic,
-                nuisance.parameter = ret2$nuisance.vector.x[c(np0,np1)],
-                p.value = c(ret2$nuisance.vector.y0[np0],ret2$nuisance.vector.y1[np1])))
-  }
+  nuisance.matrix<-matrix(cbind(ret2$nuisance.vector.x,ret2$nuisance.vector.y0,ret2$nuisance.vector.y1),ncol=3)
+  wald.statistic.table<-matrix(ret1$wald.statistic.table,ncol=4,byrow=TRUE,dimnames=list(c(),c("n1","n2","wald.statistic","include.in.p.value")))
+
+  cat(sprintf("\nBarnard's Unconditional Test\n"),sep="\n")
+  print(conmat)
+  cat(sprintf("\nNull hypothesis: Treatments have no effect on the outcomes\nWald statistic = %g\nNuisance parameter = %g (%s), %g (%s)\nP-value = %g (%s), %g (%s)\n",
+              ret1$wald.statistic,
+              ret2$nuisance.vector.x[np0],
+              alternative[1],
+              ret2$nuisance.vector.x[np1],
+              alternative[2],
+              ret2$nuisance.vector.y0[np0],
+              alternative[1],
+              ret2$nuisance.vector.y1[np1],
+              alternative[2]),sep="\n")
+  
+  return(invisible(
+      list(wald.statistic.table = wald.statistic.table,
+           nuisance.matrix = nuisance.matrix,
+           dp = dp,
+           contingency.matrix = conmat,
+           alternative = alternative,
+           wald.statistic = ret1$wald.statistic,
+           nuisance.parameter = ret2$nuisance.vector.x[c(np0,np1)],
+           p.value = c(ret2$nuisance.vector.y0[np0],ret2$nuisance.vector.y1[np1]))
+      ))
 }
 
