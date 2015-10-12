@@ -1,0 +1,11 @@
+Package: Barnard
+Type: Package
+Title: Barnard's Unconditional Test
+Version: 1.4
+Date: 2015-10-09
+Author: Kamil Erguler
+Maintainer: Kamil Erguler <k.erguler@cyi.ac.cy>
+Description: Barnard's unconditional test for 2x2 contingency tables.
+License: GPL-2
+LazyLoad: yes
+Packaged: 2015-10-09 12:28:42 UTC; kamil
