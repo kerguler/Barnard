@@ -1,2 +1,3 @@
 useDynLib(Barnard)
+export(barnard.test)
 export(barnardw.test)

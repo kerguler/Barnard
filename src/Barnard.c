@@ -1,16 +1,16 @@
 #include "R.h"
 #include "Rmath.h"
 
-void WaldS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *wald_statistic_table, double *wald_statistic) {
+void ScoreS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *statistic_table, double *statistic) {
   int i,j;
   int c1  = (*a)+(*c);
   int c2  = (*b)+(*d);
   int n   = c1+c2;
   double irat = (1.0 / (double)(c1) + 1.0 / (double)(c2));
   double pxo = (double)((*a)+(*b)) / (double)(n);
-  (*wald_statistic) = (pxo<=0 || pxo>=1) ? 0 : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt(pxo*(1.0-pxo)*(irat));
+  (*statistic) = (pxo<=0 || pxo>=1) ? 0 : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt(pxo*(1.0-pxo)*(irat));
 
-  double *IJ = wald_statistic_table;
+  double *IJ = statistic_table;
 
   double tx;
   double px;
@@ -26,13 +26,39 @@ void WaldS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *wa
   (*mat_size) = ccc;
 }
 
-void BarnardW(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *nuisance_vector_x, double *nuisance_vector_y0, double *nuisance_vector_y1, double *wald_statistic_table) {
+void WaldS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *statistic_table, double *statistic) {
+  int i,j;
+  int c1  = (*a)+(*c);
+  int c2  = (*b)+(*d);
+  double px1o = (double)(*a) / (double)(c1);
+  double px2o = (double)(*b) / (double)(c2);
+  (*statistic) = ((px1o<=0 || px1o>=1) && (px2o<=0 || px2o>=1)) ? 0 : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt( px1o*(1.0-px1o)/(double)(c1) + px2o*(1.0-px2o)/(double)(c2) );
+
+  double *IJ = statistic_table;
+
+  double tx;
+  double px1;
+  double px2;
+  int ccc = 0;
+
+  for (i=0; i<=c1; i++) for (j=0; j<=c2; j++) {
+      px1 = (double)(i)/(double)(c1);
+      px2 = (double)(j)/(double)(c2);
+      tx = ((px1<=0 || px1>=1) && (px2<=0 || px2>=1)) ? 0 : (((double)j/(double)c2)-((double)i/(double)c1)) / sqrt( px1*(1.0-px1)/(double)(c1) + px2*(1.0-px2)/(double)(c2) );
+      IJ[ccc++] = i; IJ[ccc++] = j; IJ[ccc++] = tx; IJ[ccc] = 0;
+      ccc++;
+    }
+
+  (*mat_size) = ccc;
+}
+
+void BarnardW(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *nuisance_vector_x, double *nuisance_vector_y0, double *nuisance_vector_y1, double *statistic_table) {
   int i,j;
   int c1  = (*a)+(*c);
   int c2  = (*b)+(*d);
   int n   = c1+c2;
 
-  double *IJ = wald_statistic_table;
+  double *IJ = statistic_table;
 
   double n1  = lgamma(c1+1);
   double n2  = lgamma(c2+1);

@@ -7,7 +7,7 @@ Barnard's Unconditional Test
 }
 
 \description{
-This package implements the \code{barnardw.test} function for performing Barnard's unconditional test of superiority.
+This package implements the \code{barnard.test} function for performing Barnard's unconditional test of superiority.
 This is a more powerful alternative of Fisher's exact test for 2x2 contingency tables. The test, in its current implementation, uses Wald statistics as a measure of difference between two binomial proportions.
 }
 
