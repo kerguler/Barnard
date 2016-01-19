@@ -52,7 +52,7 @@ void WaldS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *st
   (*mat_size) = ccc;
 }
 
-void BarnardW(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *nuisance_vector_x, double *nuisance_vector_y0, double *nuisance_vector_y1, double *statistic_table) {
+void Barnard(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *nuisance_vector_x, double *nuisance_vector_y0, double *nuisance_vector_y1, double *statistic_table) {
   int i,j;
   int c1  = (*a)+(*c);
   int c2  = (*b)+(*d);
