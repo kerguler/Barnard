@@ -1,5 +1,6 @@
 #include "R.h"
 #include "Rmath.h"
+#include <limits.h>
 
 void ScoreS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *statistic_table, double *statistic) {
   int i,j;
@@ -8,7 +9,7 @@ void ScoreS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *s
   int n   = c1+c2;
   double irat = (1.0 / (double)(c1) + 1.0 / (double)(c2));
   double pxo = (double)((*a)+(*b)) / (double)(n);
-  (*statistic) = (pxo<=0 || pxo>=1) ? 0 : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt(pxo*(1.0-pxo)*(irat));
+  (*statistic) = (pxo<=0 || pxo>=1) ? HUGE_VAL : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt(pxo*(1.0-pxo)*(irat));
 
   double *IJ = statistic_table;
 
@@ -32,7 +33,7 @@ void WaldS(int *a, int *b, int *c, int *d, double *dp, int *mat_size, double *st
   int c2  = (*b)+(*d);
   double px1o = (double)(*a) / (double)(c1);
   double px2o = (double)(*b) / (double)(c2);
-  (*statistic) = ((px1o<=0 || px1o>=1) && (px2o<=0 || px2o>=1)) ? 0 : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt( px1o*(1.0-px1o)/(double)(c1) + px2o*(1.0-px2o)/(double)(c2) );
+  (*statistic) = ((px1o<=0 || px1o>=1) && (px2o<=0 || px2o>=1)) ? HUGE_VAL : (((double)((*b))/(double)(c2))-((double)((*a))/(double)(c1))) / sqrt( px1o*(1.0-px1o)/(double)(c1) + px2o*(1.0-px2o)/(double)(c2) );
 
   double *IJ = statistic_table;
 
