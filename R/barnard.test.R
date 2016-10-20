@@ -16,7 +16,7 @@ function(n1,n2,n3,n4,dp=0.001,pooled=TRUE) {
   }
       
   vec.size<-1.0+1.0/dp
-  mat.size<-4.0*(n1+n3+1)*(n2+n4+1)
+  mat.size<-4.0*(n1+n3+1)*(n2+n4+1) - 4.0*2.0 # correction for (0,0) and (n1+n3,n2+n4)
   statSW<-c("WaldS","ScoreS")[1+pooled]
   ret1=.C(statSW,
       as.integer(n1),
@@ -42,7 +42,8 @@ function(n1,n2,n3,n4,dp=0.001,pooled=TRUE) {
     nuisance.vector.x = as.double(vector("double",vec.size)),
     nuisance.vector.y0 = as.double(vector("double",vec.size)),
     nuisance.vector.y1 = as.double(vector("double",vec.size)),
-    statistic.table = as.double(ret1$statistic.table))
+    statistic.table = as.double(ret1$statistic.table),
+    NAOK=TRUE)
 
   np0<-which.max(ret2$nuisance.vector.y0)
   np1<-which.max(ret2$nuisance.vector.y1)

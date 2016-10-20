@@ -50,7 +50,7 @@ Barnard's test considers all tables with category sizes \eqn{c_1} and \eqn{c_2} 
 \author{ 
 Kamil Erguler, Post-doctoral Fellow, EEWRC, The Cyprus Institute \email{k.erguler@cyi.ac.cy}
 }
-\note{ I am indebted to Peter Calhoun for helping to test the performance and the accuracy of the code. I also thank Rodrigo Duprat for his valuable comments. The accuracy has been tested with respect to the existing MATLAB and R implementations as well as the results of StatXact. I have largely been influenced by the works of Trujillo-Ortiz etal. (2004), Cardillo G. (2009), and Galili T. (2010). }
+\note{ I am indebted to Peter Calhoun for helping to test the performance and the accuracy of the code. I also thank Rodrigo Duprat, Long Qu, and Nicolas Sounac for their valuable comments. The accuracy has been tested with respect to the existing MATLAB and R implementations as well as the results of StatXact. I have largely been influenced by the works of Trujillo-Ortiz etal. (2004), Cardillo G. (2009), and Galili T. (2010). }
 
 \examples{
 barnard.test(8,14,1,3)
