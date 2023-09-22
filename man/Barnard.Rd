@@ -1,5 +1,6 @@
 \name{Barnard}
 \alias{Barnard}
+\alias{Barnard-package}
 \docType{package}
 
 \title{

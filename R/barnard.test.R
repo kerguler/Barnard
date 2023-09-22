@@ -17,8 +17,9 @@ function(n1,n2,n3,n4,dp=0.001,pooled=TRUE) {
       
   vec.size<-1.0+1.0/dp
   mat.size<-4.0*(n1+n3+1)*(n2+n4+1) - 4.0*2.0 # correction for (0,0) and (n1+n3,n2+n4)
-  statSW<-c("WaldS","ScoreS")[1+pooled]
-  ret1=.C(statSW,
+  
+  if (pooled) {
+    ret1=.C("ScoreS",
       as.integer(n1),
       as.integer(n2),
       as.integer(n3),
@@ -27,6 +28,17 @@ function(n1,n2,n3,n4,dp=0.001,pooled=TRUE) {
       mat.size = as.integer(0),
       statistic.table = as.double(vector("double",mat.size)),
       statistic = as.double(0.0))
+  } else {
+    ret1=.C("WaldS",
+      as.integer(n1),
+      as.integer(n2),
+      as.integer(n3),
+      as.integer(n4),
+      as.numeric(dp),
+      mat.size = as.integer(0),
+      statistic.table = as.double(vector("double",mat.size)),
+      statistic = as.double(0.0))
+  }
   
   xr<-seq(1,ret1$mat.size,4)+2
   ret1$statistic.table[xr+1][(ret1$statistic<=0 & ret1$statistic.table[xr]<=ret1$statistic) | (ret1$statistic>=0 & ret1$statistic.table[xr]>=ret1$statistic)]<-1

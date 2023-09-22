@@ -1,4 +1,10 @@
-.git
-.idea
-src/*.o
-src/*.so
+./.git
+./.idea
+./.idea/*
+./src/*.o
+./src/*.so
+./.DS_Store
+./.gitignore
+./.idea/.gitignore
+./R/.DS_Store
+./man/.DS_Store
